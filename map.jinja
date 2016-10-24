@@ -1,0 +1,73 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{%- load_yaml as os_family_map_server %}
+default: 
+  enabled: False
+  debug: False
+  version: mitaka
+  restartcommand: "apachectl graceful"
+#  service:
+#    state: running
+#    enable: True
+  bind:
+    host: '0.0.0.0'
+    port: '80'
+  identity:
+    region: RegionOne
+  cache: 
+    members: 
+      - host: '127.0.0.1'
+        port: '11211'
+base:
+  pkgs:
+    - httpd
+    - openstack-dashboard
+    - python-lesscpy
+    - python-memcached
+  sysconfdir: /etc/sysconfig
+  local_settings: '/etc/openstack-dashboard/local_settings'
+  local_settings_mode: '0640'
+  local_settings_user: 'root'
+  local_settings_group: 'apache'
+  webserver_config: '/etc/httpd/conf.d/openstack-dashboard.conf'
+  cert_dir: '/etc/pki/tls/certs'
+  key_dir: '/etc/pki/tls/private'
+#  services:
+#    - httpd
+RedHat:
+  pkgs:
+    - httpd
+    - openstack-dashboard
+    - python-lesscpy
+    - python-memcached
+  sysconfdir: /etc/syslocal_settings
+  local_settings: '/etc/openstack-dashboard/local_settings'
+  local_settings_mode: '0640'
+  local_settings_user: 'root'
+  local_settings_group: 'apache'
+  webserver_config: '/etc/httpd/conf.d/openstack-dashboard.conf'
+  cert_dir: '/etc/pki/tls/certs'
+  key_dir: '/etc/pki/tls/private'
+#  services:
+#    - httpd
+Debian:
+  pkgs:
+    - apache2
+    - openstack-dashboard
+    - python-lesscpy
+    - python-memcache
+    - gettext-base
+  sysconfdir: /etc/default
+  local_settings: '/etc/openstack-dashboard/local_settings.py'
+  local_settings_mode: '0644'
+  local_settings_user: 'horizon'
+  local_settings_group: 'horizon'
+  webserver_config: '/etc/apache2/conf-available/openstack-dashboard.conf'
+  cert_dir: '/etc/ssl/certs'
+  key_dir: '/etc/ssl/private'
+#  services:
+#    - apache2
+{%- endload %}
+{%- set map_server = salt['grains.filter_by'](os_family_map_server, grain="os_family", merge=salt['pillar.get']('horizon:lookup:server'), default='default', base='base') %}
+{%- set server = salt['pillar.get']('horizon:server', default=map_server, merge=True) %}
