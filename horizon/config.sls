@@ -6,18 +6,18 @@
 include:
 - horizon.packages
 
-horizon_local_settings:
+horizon_config__local_settings:
   file.managed:
   - name: {{ server.local_settings }}
-  - source: salt://horizon/files/local_settings/local_settings.{{ server.version }}
+  - source: salt://horizon/files/local_settings.{{ server.version }}
   - template: jinja
   - mode: '{{ server.local_settings_mode }}'
   - user: '{{ server.local_settings_user }}'
   - group: '{{ server.local_settings_group }}'
   - require:
-    - pkg: horizon_packages
+    - pkg: horizon_packages__packages
 
-horizon_webserver_config:
+horizon_config__webserver_config:
   file.managed:
   - name: {{ server.webserver_config }}
   - source: salt://horizon/files/openstack-dashboard.conf
@@ -26,4 +26,4 @@ horizon_webserver_config:
   - user: 'root'
   - group: 'root'
   - require:
-    - pkg: horizon_packages
+    - pkg: horizon_packages__packages

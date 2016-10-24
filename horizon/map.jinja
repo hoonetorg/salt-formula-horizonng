@@ -2,7 +2,7 @@
 # vim: ft=jinja
 
 {%- load_yaml as os_family_map_server %}
-default: 
+base:
   enabled: False
   debug: False
   version: mitaka
@@ -19,7 +19,7 @@ default:
     members: 
       - host: '127.0.0.1'
         port: '11211'
-base:
+default: 
   pkgs:
     - httpd
     - openstack-dashboard

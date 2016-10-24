@@ -1,3 +1,4 @@
+{%- from "horizon/map.jinja" import server with context %}
 # -*- coding: utf-8 -*-
 
 import os
@@ -181,7 +182,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 OPENSTACK_HOST = "{{ server.get('identity', {}).get('host', '127.0.0.1') }}"
 OPENSTACK_KEYSTONE_URL = "http{% if server.get('identity', {}).get('encryption') in ['ssl'] %}s{% endif %}://%s:{{ server.get('identity', {}).get('port', '5000') }}/v{{ server.get('api_versions', {}).get('identity', '2.0') }}" % OPENSTACK_HOST
-OPENSTACK_KEYSTONE_DEFAULT_ROLE = "{{ server.get('identity', {}).get('keystone_default_role', 'user) }}"
+OPENSTACK_KEYSTONE_DEFAULT_ROLE = "{{ server.get('identity', {}).get('keystone_default_role', 'user') }}"
 
 # Enables keystone web single-sign-on if set to True.
 #WEBSSO_ENABLED = False

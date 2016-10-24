@@ -3,10 +3,8 @@
 
 {%- from "horizon/map.jinja" import server with context %}
 
-horizon_restart:
+horizon_service__restart:
   module.wait:
     - name: cmd.run
     - cmd: {{server.restartcommand}}
     - python_shell: True
-
-

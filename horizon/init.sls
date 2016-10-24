@@ -6,7 +6,10 @@ include:
   - horizon.service
 
 extend:
-  horizon_restart:
+  horizon_service__restart:
     module:
       - require:
         - sls: horizon.config
+      - watch:
+        - file: horizon_config__local_settings
+        - file: horizon_config__webserver_config
